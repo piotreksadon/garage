@@ -6,4 +6,4 @@ services:
     restart: always
     ports: [5432:5432]
     environment:
-      POSTRES_PASSWORD: pass123
+      POSTGRES_PASSWORD: pass123
