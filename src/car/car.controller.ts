@@ -3,45 +3,43 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   Param,
   Patch,
   Post,
   Query,
 } from '@nestjs/common';
-import { CarsService } from './cars.service';
+import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
-@Controller('cars')
-export class CarsController {
-  constructor(private readonly carsService: CarsService) {}
+@Controller('car')
+export class CarController {
+  constructor(private readonly carService: CarService) {}
 
   @Get()
-  findAll() {
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
     // const { limit, offset } = paginationQuery;
-    return this.carsService.findAll();
+    return this.carService.findAll(paginationQuery);
   }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    console.log(typeof id);
-    return this.carsService.findOne('' + id);
+    return this.carService.findOne('' + id);
   }
 
   @Post()
   create(@Body() createCarDto: CreateCarDto) {
-    console.log(createCarDto instanceof CreateCarDto);
-    return this.carsService.create(createCarDto);
+    return this.carService.create(createCarDto);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
-    return this.carsService.update(id, updateCarDto);
+    return this.carService.update(id, updateCarDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.carsService.remove(id);
+    return this.carService.remove(id);
   }
 }
