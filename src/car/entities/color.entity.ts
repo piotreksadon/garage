@@ -1,14 +1,14 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Car } from './cars.entity';
+import { Car } from './car.entity';
 
 @Entity()
-export class Colors {
+export class Color {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @ManyToMany((type) => Car, (car) => car.colors)
-  cars: Car[];
+  @ManyToMany((type) => Car, (car) => car.color)
+  car: Car[];
 }

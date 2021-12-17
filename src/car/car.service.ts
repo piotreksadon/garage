@@ -1,27 +1,27 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Car } from './entities/cars.entity';
+import { Car } from './entities/car.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
-import { Colors } from './entities/colors.entity';
+import { Color } from './entities/color.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
 
 @Injectable()
-export class CarsService {
+export class CarService {
   constructor(
     @InjectRepository(Car)
     private readonly carRepository: Repository<Car>,
-    @InjectRepository(Colors)
-    private readonly colorRepository: Repository<Colors>,
+    @InjectRepository(Color)
+    private readonly colorRepository: Repository<Color>,
     private readonly connection: Connection,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
     return this.carRepository.find({
-      relations: ['colors'],
+      relations: ['color'],
       skip: offset,
       take: limit,
     });
@@ -29,7 +29,7 @@ export class CarsService {
 
   async findOne(id: string) {
     const car = await this.carRepository.findOne(id, {
-      relations: ['colors'],
+      relations: ['color'],
     });
     if (!car) {
       throw new NotFoundException(`Car no. ${id} does not exist.`);
@@ -38,28 +38,28 @@ export class CarsService {
   }
 
   async create(createCarDto: CreateCarDto) {
-    const colors = await Promise.all(
-      createCarDto.colors.map((name) => this.preloadColorByName(name)),
+    const color = await Promise.all(
+      createCarDto.color.map((name) => this.preloadColorByName(name)),
     );
 
     const car = this.carRepository.create({
       ...createCarDto,
-      colors,
+      color,
     });
     return this.carRepository.save(car);
   }
 
   async update(id: string, updateCarDto: UpdateCarDto) {
-    const colors =
-      updateCarDto.colors &&
+    const color =
+      updateCarDto.color &&
       (await Promise.all(
-        updateCarDto.colors.map((name) => this.preloadColorByName(name)),
+        updateCarDto.color.map((name) => this.preloadColorByName(name)),
       ));
 
     const car = await this.carRepository.preload({
       id: +id,
       ...updateCarDto,
-      colors,
+      color,
     });
     if (!car) {
       throw new NotFoundException(`Car no. ${id} not found.`);
@@ -72,7 +72,7 @@ export class CarsService {
     return this.carRepository.remove(car);
   }
 
-  private async preloadColorByName(name: string): Promise<Colors> {
+  private async preloadColorByName(name: string): Promise<Color> {
     const existingColor = await this.colorRepository.findOne({ name });
     if (existingColor) {
       return existingColor;
@@ -80,7 +80,7 @@ export class CarsService {
     return this.colorRepository.create({ name });
   }
 
-  async recommendCars(car: Car) {
+  async recommendCar(car: Car) {
     const queryRunner = this.connection.createQueryRunner();
 
     await queryRunner.connect();

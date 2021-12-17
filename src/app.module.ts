@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CarsModule } from './cars/cars.module';
+import { CarModule } from './car/car.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    CarsModule,
+    CarModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
