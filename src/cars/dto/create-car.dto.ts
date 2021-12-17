@@ -1,12 +1,13 @@
 import { IsNumber, IsString } from 'class-validator';
+import { Car } from '../entities/cars.entity';
 
 export class CreateCarDto {
   @IsString()
-  readonly brand: string;
+  readonly brand: Car['brand'];
   @IsString()
-  readonly model: string;
+  readonly model: Car['model'];
   @IsNumber()
-  readonly productionYear: number;
+  readonly productionYear: Car['productionYear'];
   @IsString({ each: true })
   readonly colors: string[];
 }

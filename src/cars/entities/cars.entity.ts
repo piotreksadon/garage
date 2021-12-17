@@ -8,7 +8,7 @@ import {
 import { Colors } from './colors.entity';
 
 @Entity()
-export class Cars {
+export class Car {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,6 +20,9 @@ export class Cars {
 
   @Column()
   productionYear: number;
+
+  @Column({ default: 0 })
+  recommendations: number;
 
   @JoinTable()
   @ManyToMany((type) => Colors, (colors) => colors.cars, { cascade: true })

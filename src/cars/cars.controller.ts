@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   Param,
   Patch,
   Post,
@@ -12,26 +11,25 @@ import {
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
 @Controller('cars')
 export class CarsController {
   constructor(private readonly carsService: CarsService) {}
 
   @Get()
-  findAll() {
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
     // const { limit, offset } = paginationQuery;
-    return this.carsService.findAll();
+    return this.carsService.findAll(paginationQuery);
   }
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    console.log(typeof id);
     return this.carsService.findOne('' + id);
   }
 
   @Post()
   create(@Body() createCarDto: CreateCarDto) {
-    console.log(createCarDto instanceof CreateCarDto);
     return this.carsService.create(createCarDto);
   }
 
