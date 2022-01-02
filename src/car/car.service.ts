@@ -7,7 +7,8 @@ import { UpdateCarDto } from './dto/update-car.dto';
 import { Color } from './entities/color.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
-import { CAR_BRANDS } from './car.constants';
+import { ConfigType } from '@nestjs/config';
+import { carConfig } from './config/car.config';
 
 @Injectable({ scope: Scope.REQUEST })
 export class CarService {
@@ -17,7 +18,8 @@ export class CarService {
     @InjectRepository(Color)
     private readonly colorRepository: Repository<Color>,
     private readonly connection: Connection,
-    @Inject(CAR_BRANDS) carBrands: string[],
+    @Inject(carConfig.KEY)
+    private readonly carConfiguration: ConfigType<typeof carConfig>,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {

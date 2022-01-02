@@ -20,6 +20,8 @@ export class CarController {
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
     // const { limit, offset } = paginationQuery;
+    console.log('caaaaaaaaaaaaaaaaar');
+
     return this.carService.findAll(paginationQuery);
   }
 
