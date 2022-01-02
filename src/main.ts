@@ -3,15 +3,6 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  process.on('uncaughtException', (error: Error) => {
-    console.log(error);
-    console.log('dupaaaaaaaaaaaaaaa');
-  });
-
-  process.on('unhandledRejection', (reason) => {
-    console.log(reason);
-    console.log('dupaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-  });
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
