@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CarModule } from './car/car.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CarRatingModule } from './car-rating/car-rating.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    CarRatingModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

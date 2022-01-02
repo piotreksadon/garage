@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { Car } from './entities/car.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
@@ -7,8 +7,9 @@ import { UpdateCarDto } from './dto/update-car.dto';
 import { Color } from './entities/color.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
+import { CAR_BRANDS } from './car.constants';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class CarService {
   constructor(
     @InjectRepository(Car)
@@ -16,6 +17,7 @@ export class CarService {
     @InjectRepository(Color)
     private readonly colorRepository: Repository<Color>,
     private readonly connection: Connection,
+    @Inject(CAR_BRANDS) carBrands: string[],
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -41,7 +43,6 @@ export class CarService {
     const color = await Promise.all(
       createCarDto.color.map((name) => this.preloadColorByName(name)),
     );
-
     const car = this.carRepository.create({
       ...createCarDto,
       color,

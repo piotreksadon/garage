@@ -13,7 +13,10 @@ export class Car {
   id: number;
 
   @Column()
-  title: string;
+  brand: string;
+
+  @Column({ nullable: true })
+  description: string;
 
   @Column()
   model: string;
