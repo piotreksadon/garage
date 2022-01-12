@@ -11,4 +11,5 @@ export class CreateCarDto {
   readonly productionYear: Car['productionYear'];
   @IsString({ each: true })
   readonly color: string[];
+
 }
