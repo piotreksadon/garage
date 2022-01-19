@@ -23,13 +23,15 @@ export class CarService {
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto, color?: string) {
-    const query = this.carRepository.createQueryBuilder('car').leftJoinAndSelect('car.color', 'color');
-    if(color){
-      query.where('color.name=:color', {color})
+    const query = this.carRepository
+      .createQueryBuilder('car')
+      .leftJoinAndSelect('car.color', 'color');
+    if (color) {
+      query.where('color.name=:color', { color });
     }
-    query.offset(paginationQuery.offset)
-    query.limit(paginationQuery.limit)
-  return query.getMany()
+    query.offset(paginationQuery.offset);
+    query.limit(paginationQuery.limit);
+    return query.getMany();
   }
 
   async findOne(id: number) {
