@@ -22,16 +22,17 @@ export class CarService {
     private readonly carConfiguration: ConfigType<typeof carConfig>,
   ) {}
 
-  findAll(paginationQuery: PaginationQueryDto) {
-    const { limit, offset } = paginationQuery;
-    return this.carRepository.find({
-      relations: ['color'],
-      skip: offset,
-      take: limit,
-    });
+  findAll(paginationQuery: PaginationQueryDto, color?: string) {
+    const query = this.carRepository.createQueryBuilder('car').leftJoinAndSelect('car.color', 'color');
+    if(color){
+      query.where('color.name=:color', {color})
+    }
+    query.offset(paginationQuery.offset)
+    query.limit(paginationQuery.limit)
+  return query.getMany()
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const car = await this.carRepository.findOne(id, {
       relations: ['color'],
     });
@@ -70,7 +71,7 @@ export class CarService {
     return this.carRepository.save(car);
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const car = await this.findOne(id);
     return this.carRepository.remove(car);
   }

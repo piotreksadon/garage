@@ -15,8 +15,8 @@ export class Car {
   @Column()
   brand: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({nullable: true})
+  description?: string;
 
   @Column()
   model: string;

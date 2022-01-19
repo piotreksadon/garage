@@ -12,22 +12,27 @@ import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
+import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
+import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Car')
 @Controller('car')
 export class CarController {
   constructor(private readonly carService: CarService) {}
 
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   @Get()
-  findAll(@Query() paginationQuery: PaginationQueryDto) {
-    // const { limit, offset } = paginationQuery;
-    console.log('caaaaaaaaaaaaaaaaar');
-
-    return this.carService.findAll(paginationQuery);
+  async findAll(
+    @Query() paginationQuery: PaginationQueryDto,
+    @Query('color') color?: string,
+  ) {
+    return this.carService.findAll(paginationQuery, color);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.carService.findOne('' + id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    console.log(id);
+    return this.carService.findOne(id);
   }
 
   @Post()
@@ -41,7 +46,7 @@ export class CarController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.carService.remove(id);
   }
 }
